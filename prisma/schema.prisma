@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GenderType {
+  PRIA
+  WANITA
+}
+
+model users {
+  id               Int        @id @default(autoincrement()) @map("id_users")
+  uniqueId         String     @unique @default(uuid()) @map("unique_id")
+  email            String     @map("email_user")
+  name             String     @map("name_user")
+  gender           GenderType @map("gender")
+  password         String     @map("password")
+  createdAt        DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt        DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  educationLevelId Int
+
+  educationLevel educationLevel @relation(fields: [educationLevelId], references: [id])
+
+  @@index([createdAt])
+  @@index([gender])
+  @@map("users")
+}
+
+model educationLevel {
+  id        Int      @id @default(autoincrement()) @map("id_education_level")
+  uniqueId  String   @unique @default(uuid()) @map("unique_id")
+  level     String   @map("education_level")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  users users[]
+
+  @@index([createdAt])
+  @@index([level])
+  @@map("education_level")
+}
