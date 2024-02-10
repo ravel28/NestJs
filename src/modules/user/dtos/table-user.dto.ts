@@ -1,11 +1,12 @@
 import { GenderType } from '@prisma/client';
 
-export class UsersDto {
+export class TableViewUserDataDto {
   id: number;
   uniqueId: string;
   email: string;
   name: string;
   password: string;
   gender: GenderType;
-  educationId: number;
+  presentStatus?: string;
+  educationLevelId: number;
 }

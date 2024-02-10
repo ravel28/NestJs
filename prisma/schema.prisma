@@ -15,6 +15,13 @@ enum GenderType {
   WANITA
 }
 
+enum StatusPresentType {
+  LATE
+  ONTIME
+  SICK
+  ALFA
+}
+
 model users {
   id               Int        @id @default(autoincrement()) @map("id_users")
   uniqueId         String     @unique @default(uuid()) @map("unique_id")
@@ -26,14 +33,16 @@ model users {
   updatedAt        DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
   educationLevelId Int
 
-  educationLevel educationLevel @relation(fields: [educationLevelId], references: [id])
+  present Presents[]
+
+  educationLevel educationLevels @relation(fields: [educationLevelId], references: [id])
 
   @@index([createdAt])
   @@index([gender])
   @@map("users")
 }
 
-model educationLevel {
+model educationLevels {
   id        Int      @id @default(autoincrement()) @map("id_education_level")
   uniqueId  String   @unique @default(uuid()) @map("unique_id")
   level     String   @map("education_level")
@@ -44,5 +53,22 @@ model educationLevel {
 
   @@index([createdAt])
   @@index([level])
-  @@map("education_level")
+  @@map("education_levels")
+}
+
+model Presents {
+  id        Int               @id @default(autoincrement()) @map("id_absensi")
+  uniqueId  String            @default(uuid()) @map("unique_id")
+  date      DateTime          @map("present_date")
+  status    StatusPresentType @map("status_present")
+  usersId   Int               @map("user_id")
+  createdAt DateTime          @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  users users @relation(fields: [usersId], references: [id])
+
+  @@index([createdAt])
+  @@index([date])
+  @@index([usersId])
+  @@map("presents")
 }

@@ -1,5 +1,10 @@
 import { Logger } from '@nestjs/common';
-import { GenderType, Prisma, PrismaClient } from '@prisma/client';
+import {
+  GenderType,
+  Prisma,
+  PrismaClient,
+  StatusPresentType,
+} from '@prisma/client';
 
 export class InsertAllSeed {
   prisma: PrismaClient<Prisma.PrismaClientOptions, never>;
@@ -12,7 +17,7 @@ export class InsertAllSeed {
   }
 
   async handleSeeds(): Promise<void> {
-    await this.prisma.educationLevel.createMany({
+    await this.prisma.educationLevels.createMany({
       data: [
         {
           level: 'TK/Paud',
@@ -51,6 +56,21 @@ export class InsertAllSeed {
           gender: GenderType.WANITA,
           password: 'akusudahlelahdisini',
           educationLevelId: 6,
+        },
+      ],
+    });
+
+    await this.prisma.presents.createMany({
+      data: [
+        {
+          date: new Date(),
+          status: StatusPresentType.LATE,
+          usersId: 1,
+        },
+        {
+          date: new Date(),
+          status: StatusPresentType.LATE,
+          usersId: 2,
         },
       ],
     });
