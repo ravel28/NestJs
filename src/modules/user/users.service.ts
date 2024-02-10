@@ -73,9 +73,12 @@ export class UserService extends BaseService implements UserServiceInterface {
         take: dto.take,
         skip: dto.take * (dto.page - 1),
         orderBy: {
-          createdAt: 'desc',
+          name: 'desc',
         },
       });
+
+      if (items.length < 1)
+        throw new NotFoundException('We apologize, user data is null ');
 
       const mappingItems = from(items).pipe(
         catchError((error) => {
@@ -84,9 +87,9 @@ export class UserService extends BaseService implements UserServiceInterface {
         concatMap((user) => this.mappingPresentUser(user)),
       );
 
-      items.length > 0 ? await lastValueFrom(mappingItems) : undefined;
+      await lastValueFrom(mappingItems);
 
-      // Value of object meta data
+      // Meta data
       const keyword: string = dto.keyword ? dto.keyword : null;
       const totalItems: number = await this.prisma.users.count();
       const totalItemsPerPage: number = items.length;
@@ -101,6 +104,7 @@ export class UserService extends BaseService implements UserServiceInterface {
         totalPage,
       };
 
+      //Dashboard data
       const late: number = await this.prisma.presents.count({
         where: {
           status: StatusPresentType.LATE,

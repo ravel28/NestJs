@@ -49,7 +49,7 @@ export class UserDto {
   @IsNotEmpty()
   @IsEnum(GenderType)
   @ApiProperty({
-    example: [GenderType.PRIA, GenderType.WANITA],
+    example: GenderType.PRIA,
     type: String,
     required: true,
   })
@@ -59,8 +59,8 @@ export class UserDto {
   @IsNumber()
   @Type(() => Number)
   @ApiProperty({
-    example: [GenderType.PRIA, GenderType.WANITA],
-    type: String,
+    example: 1,
+    type: Number,
     required: true,
   })
   educationLevelId: number;

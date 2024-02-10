@@ -62,7 +62,7 @@ export class UserController
   async updateUser(
     @Res() res: Response,
     @Param('uniqueId') uniqueId: string,
-    @Query() dto: UserDto,
+    @Body() dto: UserDto,
   ): Promise<Response> {
     try {
       const query: UserDto = { ...dto, uniqueId };
